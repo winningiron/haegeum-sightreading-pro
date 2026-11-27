@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>해금 초견 프로 — 현대 창작국악 · 고난도 초견 챌린지</title>
+<meta name="description" content="Verovio + Leland로 조판한 해금 초견 챌린지. 입시 실전 모드, 메트로놈, 기준음, 오늘의 모의고사, 진도 체크.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">해금</span>
+    <div>
+      <h1>초견 프로 <span class="brand-sub">HAEGEUM SIGHT-READING PRO</span></h1>
+      <p class="brand-tag">현대 창작국악 · 고난도 초견 챌린지 — Verovio + Leland 조판</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="mockBtn" class="btn gold" type="button">오늘의 모의고사 · 랜덤 3곡</button>
+    <button id="themeBtn" class="btn ghost" type="button" aria-label="다크/라이트 전환">☀️ 라이트</button>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <p>기존 초견 라운지와는 다른 챌린지용 연습실입니다. 5/8·7/8 혼합박자, 조바꿈, 넓은 도약, subito p와 극적인 cresc.가 돋보이는 오리지널 연습곡 12곡(시범)입니다. 모든 악보는 Verovio 6.4.1 + Leland 폰트로 A4 세로 1페이지로 렌더링했습니다.</p>
+    <p class="credit-line">LEE SEUNG CHUL (with AI) · 무단 복제 및 배포를 절대 금합니다.</p>
+  </section>
+
+  <section class="filters" aria-label="필터">
+    <div class="filter-group" id="levelFilters">
+      <span class="filter-label">난이도</span>
+      <button type="button" data-filter="level" data-value="all" class="chip active">전체</button>
+      <button type="button" data-filter="level" data-value="기초" class="chip">기초</button>
+      <button type="button" data-filter="level" data-value="중급" class="chip">중급</button>
+      <button type="button" data-filter="level" data-value="고급" class="chip">고급</button>
+    </div>
+    <div class="filter-group" id="keyFilters">
+      <span class="filter-label">조표</span>
+      <button type="button" data-filter="key" data-value="all" class="chip active">전체</button>
+      <button type="button" data-filter="key" data-value="E♭" class="chip">E♭</button>
+      <button type="button" data-filter="key" data-value="A♭" class="chip">A♭</button>
+      <button type="button" data-filter="key" data-value="B♭" class="chip">B♭</button>
+      <button type="button" data-filter="key" data-value="D♭" class="chip">D♭</button>
+      <button type="button" data-filter="key" data-value="G♭" class="chip">G♭</button>
+    </div>
+    <div class="filter-group" id="meterFilters">
+      <span class="filter-label">박자</span>
+      <button type="button" data-filter="meter" data-value="all" class="chip active">전체</button>
+      <button type="button" data-filter="meter" data-value="5/8" class="chip">5/8</button>
+      <button type="button" data-filter="meter" data-value="7/8" class="chip">7/8</button>
+      <button type="button" data-filter="meter" data-value="4/4" class="chip">4/4</button>
+      <button type="button" data-filter="meter" data-value="변박" class="chip">변박</button>
+      <button type="button" data-filter="meter" data-value="조바꿈" class="chip">조바꿈</button>
+    </div>
+    <div class="progress-summary" id="progressSummary">진도: —</div>
+  </section>
+
+  <section class="song-grid" id="songGrid" aria-label="곡 목록"></section>
+
+  <section class="viewer" id="viewer" hidden>
+    <div class="viewer-bar">
+      <button id="closeViewer" class="btn ghost" type="button">← 목록으로</button>
+      <div class="viewer-title" id="viewerTitle">—</div>
+      <div class="viewer-tools">
+        <button id="examBtn" class="btn gold" type="button">입시 실전 모드 (30초 미리보기)</button>
+        <button id="metroBtn" class="btn" type="button">메트로놈 OFF</button>
+        <button id="droneBtn" class="btn" type="button">기준음 A4=440</button>
+        <button id="tonicBtn" class="btn" type="button">으뜸음</button>
+        <button id="focusBtn" class="btn" type="button">집중 연습 뷰</button>
+      </div>
+    </div>
+    <div class="exam-banner" id="examBanner" hidden>
+      <span id="examText">초견 읽기 — 30초</span>
+      <span class="exam-count" id="examCount">30</span>
+    </div>
+    <div class="audio-panel" id="audioPanel">
+      <div class="audio-row">
+        <strong>▶ 가이드 재생</strong>
+        <label>모드
+          <select id="modeSel">
+            <option value="piano+metro">피아노 + 메트로놈</option>
+            <option value="metro">예비박 + 메트로놈만 (피아노 OFF)</option>
+            <option value="piano">피아노만</option>
+          </select>
+        </label>
+        <label>속도
+          <select id="speedSel">
+            <option value="0.75">0.75x 느리게</option>
+            <option value="0.85">0.85x</option>
+            <option value="1" selected>1.0x 원래 속도</option>
+          </select>
+        </label>
+        <button id="playBtn" class="btn gold" type="button">▶ 재생 (예비박부터)</button>
+        <button id="stopBtn" class="btn" type="button">■ 정지</button>
+        <span id="countInLabel" class="audio-hint">예비박: —</span>
+      </div>
+      <div class="audio-row">
+        <span id="nowPlaying" class="now-playing">재생 중이 아닙니다.</span>
+        <button id="firstNoteBtn" class="btn ghost" type="button">첫 음 미리 듣기</button>
+      </div>
+      <div class="audio-row">
+        <strong>구간 반복 (A-B 루프)</strong>
+        <label>시작 마디 <input id="loopA" type="number" min="1" value="1"></label>
+        <label>끝 마디 <input id="loopB" type="number" min="1" value="1"></label>
+        <label><input id="loopChk" type="checkbox"> 구간 무한 반복</label>
+        <span class="audio-hint">느린 속도(0.75x)와 함께 쓰면 어려운 마디 연습에 좋습니다.</span>
+      </div>
+      <div class="audio-row">
+        <strong>블라인드 실전</strong>
+        <button id="blindBtn" class="btn" type="button">블라인드 실전 모드 (30초 읽기 → 메트로놈만)</button>
+        <button id="answerBtn" class="btn gold" type="button" hidden>정답 피아노로 듣기</button>
+        <span class="audio-hint">블라인드: 악보를 가리고 30초 읽은 뒤, 피아노 없이 메트로놈만으로 연주합니다. 끝나면 정답을 피아노로 확인하세요.</span>
+      </div>
+    </div>
+    <div class="score-wrap" id="scoreWrap">
+      <div id="blindCover" class="blind-cover" hidden>초견 중 — 악보를 보지 말고 귀로 들으세요</div>
+      <img id="scoreImg" alt="악보" src="">
+      <p class="score-note">악보는 A4 세로 1페이지, Verovio + Leland 조판입니다. 아래에서 PDF / MusicXML을 받을 수 있습니다.</p>
+    </div>
+    <div class="viewer-foot">
+      <a id="pdfLink" class="btn" href="#" download>PDF 받기</a>
+      <a id="xmlLink" class="btn ghost" href="#" download>MusicXML 받기</a>
+      <label class="done-check"><input type="checkbox" id="doneCheck"> 완료했어요</label>
+      <button id="countBtn" class="btn ghost" type="button">연습 1회 기록</button>
+      <span id="countLabel">연습 횟수: 0회</span>
+      <label class="memo-label">어려웠던 마디 메모
+        <textarea id="memoInput" rows="2" placeholder="예: 29마디 조바꿈, 46마디 트릴"></textarea>
+      </label>
+    </div>
+    <div class="mock-nav" id="mockNav" hidden>
+      <button id="mockPrev" class="btn" type="button">← 이전 곡</button>
+      <span id="mockLabel">모의고사 1 / 3</span>
+      <button id="mockNext" class="btn gold" type="button">다음 곡 →</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>해금 초견 프로 — 시범 12곡 · Verovio 6.4.1 + Leland · A4 세로 1페이지 · LEE SEUNG CHUL (with AI)</p>
+  <p>무단 복제 및 배포를 절대 금합니다.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

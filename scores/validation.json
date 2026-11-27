@@ -1,0 +1,1897 @@
+{
+ "generated_by": "tools/build_scores.py",
+ "verovio": "6.4.1 + Leland (gen_scores.render)",
+ "font_kr": "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+ "rules_note": "규칙 3의 SVG 기하 겹침은 검사 불가. 규칙 4의 excess>0이면 줄 끝 예고표(cautionary)가 있다는 뜻이다.",
+ "pieces": [
+  {
+   "no": 1,
+   "title": "첫 호흡, 긴 음",
+   "level": "기초",
+   "bars": 42,
+   "meters": [
+    "4/4"
+   ],
+   "keys": [
+    "Eb"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 84,
+    "max_pitch": "C6"
+   },
+   "lines": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "lines_original": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 6,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 17,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 1,
+     "expected": 1,
+     "excess": 0
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 225252,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "001.png",
+    "pdf": "001.pdf",
+    "musicxml": "001.musicxml"
+   }
+  },
+  {
+   "no": 2,
+   "title": "세 박자의 걸음",
+   "level": "기초",
+   "bars": 42,
+   "meters": [
+    "3/4"
+   ],
+   "keys": [
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 60,
+    "min_pitch": "C4",
+    "max_midi": 79,
+    "max_pitch": "G5"
+   },
+   "lines": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "lines_original": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 6,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 7,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 10,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 14,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 15,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 32,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 34,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 1,
+     "expected": 1,
+     "excess": 0
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 189035,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "002.png",
+    "pdf": "002.pdf",
+    "musicxml": "002.musicxml"
+   }
+  },
+  {
+   "no": 3,
+   "title": "흔들리는 여섯 박",
+   "level": "기초",
+   "bars": 40,
+   "meters": [
+    "6/8"
+   ],
+   "keys": [
+    "Eb"
+   ],
+   "range": {
+    "min_midi": 60,
+    "min_pitch": "C4",
+    "max_midi": 82,
+    "max_pitch": "B♭5"
+   },
+   "lines": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    5,
+    5
+   ],
+   "lines_original": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    5,
+    5
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    5,
+    5
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 6,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 9,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 12,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 14,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 37,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 1,
+     "expected": 1,
+     "excess": 0
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 215553,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "003.png",
+    "pdf": "003.pdf",
+    "musicxml": "003.musicxml"
+   }
+  },
+  {
+   "no": 4,
+   "title": "두 박에서 네 박으로",
+   "level": "기초",
+   "bars": 42,
+   "meters": [
+    "2/4",
+    "4/4"
+   ],
+   "keys": [
+    "Bb"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 82,
+    "max_pitch": "B♭5"
+   },
+   "lines": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "lines_original": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 5,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 8,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 12,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 14,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 19,
+      "from_idx": 4,
+      "to_idx": 3,
+      "stop_idx": 5
+     },
+     {
+      "measure": 40,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 3,
+     "expected": 2,
+     "excess": 1
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 203630,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "004.png",
+    "pdf": "004.pdf",
+    "musicxml": "004.musicxml"
+   }
+  },
+  {
+   "no": 5,
+   "title": "다섯 박의 파도",
+   "level": "중급",
+   "bars": 49,
+   "meters": [
+    "5/8",
+    "3/4"
+   ],
+   "keys": [
+    "Eb",
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 82,
+    "max_pitch": "B♭5"
+   },
+   "lines": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 3,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 4,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 5,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 7,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 8,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 12,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 15,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 17,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 18,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 26,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 29,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 30,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 36,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 40,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 45,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 3,
+     "expected": 2,
+     "excess": 1
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 257912,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "농현",
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "005.png",
+    "pdf": "005.pdf",
+    "musicxml": "005.musicxml"
+   }
+  },
+  {
+   "no": 6,
+   "title": "일곱 박의 미로",
+   "level": "중급",
+   "bars": 49,
+   "meters": [
+    "7/8",
+    "6/8"
+   ],
+   "keys": [
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 80,
+    "max_pitch": "A♭5"
+   },
+   "lines": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 12,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 15,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 19,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 20,
+      "from_idx": 4,
+      "to_idx": 3,
+      "stop_idx": 5
+     },
+     {
+      "measure": 21,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 25,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 30,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 32,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 33,
+      "from_idx": 4,
+      "to_idx": 3,
+      "stop_idx": 5
+     },
+     {
+      "measure": 34,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 36,
+      "from_idx": 4,
+      "to_idx": 3,
+      "stop_idx": 5
+     },
+     {
+      "measure": 40,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 41,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 45,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 46,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 48,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 3,
+     "expected": 2,
+     "excess": 1
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 274916,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "농현",
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "006.png",
+    "pdf": "006.pdf",
+    "musicxml": "006.musicxml"
+   }
+  },
+  {
+   "no": 7,
+   "title": "아홉 박의 질주",
+   "level": "중급",
+   "bars": 48,
+   "meters": [
+    "9/8",
+    "4/4"
+   ],
+   "keys": [
+    "Db",
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 84,
+    "max_pitch": "C6"
+   },
+   "lines": [
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6
+   ],
+   "lines_original": [
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    8,
+    8,
+    8,
+    6,
+    6,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 3,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 7,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 5
+     },
+     {
+      "measure": 20,
+      "from_idx": 7,
+      "to_idx": 6,
+      "stop_idx": 8
+     },
+     {
+      "measure": 22,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 29,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 5
+     },
+     {
+      "measure": 30,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 5
+     },
+     {
+      "measure": 32,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 4
+     },
+     {
+      "measure": 44,
+      "from_idx": 5,
+      "to_idx": 4,
+      "stop_idx": 7
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 3,
+     "expected": 2,
+     "excess": 1
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 288576,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "농현",
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "007.png",
+    "pdf": "007.pdf",
+    "musicxml": "007.musicxml"
+   }
+  },
+  {
+   "no": 8,
+   "title": "열두 박의 물결",
+   "level": "중급",
+   "bars": 35,
+   "meters": [
+    "12/8"
+   ],
+   "keys": [
+    "Bb",
+    "Eb"
+   ],
+   "range": {
+    "min_midi": 57,
+    "min_pitch": "A3",
+    "max_midi": 82,
+    "max_pitch": "B♭5"
+   },
+   "lines": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "lines_original": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "postprocess": {
+    "trill_before": 0,
+    "trill_after": 0,
+    "trill_measure": null,
+    "trill_pitch": null,
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 3,
+      "from_idx": 5,
+      "to_idx": 3,
+      "stop_idx": 6
+     },
+     {
+      "measure": 10,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 5
+     },
+     {
+      "measure": 16,
+      "from_idx": 8,
+      "to_idx": 6,
+      "stop_idx": 10
+     },
+     {
+      "measure": 18,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 20,
+      "from_idx": 8,
+      "to_idx": 6,
+      "stop_idx": 10
+     },
+     {
+      "measure": 27,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 28,
+      "from_idx": 4,
+      "to_idx": 3,
+      "stop_idx": 6
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 1,
+     "expected": 1,
+     "excess": 0
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 262163,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "농현",
+    "임시표",
+    "장식음"
+   ],
+   "files": {
+    "png": "008.png",
+    "pdf": "008.pdf",
+    "musicxml": "008.musicxml"
+   }
+  },
+  {
+   "no": 9,
+   "title": "변박의 불꽃",
+   "level": "고급",
+   "bars": 48,
+   "meters": [
+    "5/8",
+    "3/4",
+    "4/4"
+   ],
+   "keys": [
+    "Eb",
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 81,
+    "max_pitch": "A5"
+   },
+   "lines": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 1,
+    "trill_after": 1,
+    "trill_measure": 45,
+    "trill_pitch": "G4",
+    "trill_mordent_removed": false,
+    "subito_p_removed": [
+     {
+      "measure": 15,
+      "dynamics": [
+       "p"
+      ]
+     }
+    ],
+    "subito_p_measures": [
+     15,
+     45
+    ],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 2,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 7,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 8,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 9,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 10,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 12,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 14,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 31,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 34,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 37,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 4
+     },
+     {
+      "measure": 39,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 7,
+     "expected": 4,
+     "excess": 3
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 277854,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "subito p",
+    "농현",
+    "임시표",
+    "장식음",
+    "트릴"
+   ],
+   "files": {
+    "png": "009.png",
+    "pdf": "009.pdf",
+    "musicxml": "009.musicxml"
+   }
+  },
+  {
+   "no": 10,
+   "title": "엇박의 도전",
+   "level": "고급",
+   "bars": 48,
+   "meters": [
+    "7/8",
+    "4/4"
+   ],
+   "keys": [
+    "Ab",
+    "Db"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 84,
+    "max_pitch": "C6"
+   },
+   "lines": [
+    8,
+    8,
+    6,
+    6,
+    8,
+    6,
+    6
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "check_line_plan_original_warnings": [
+    "3번째 줄 4/4 7마디",
+    "4번째 줄 4/4 7마디"
+   ],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    8,
+    8,
+    6,
+    6,
+    8,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 3,
+    "trill_after": 1,
+    "trill_measure": 46,
+    "trill_pitch": "F4",
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [
+     12,
+     38
+    ],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 1,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 2,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 3,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 8,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 14,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 30,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 40,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 45,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 47,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 6,
+     "expected": 4,
+     "excess": 2
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 296673,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "subito p",
+    "농현",
+    "임시표",
+    "장식음",
+    "트릴"
+   ],
+   "files": {
+    "png": "010.png",
+    "pdf": "010.pdf",
+    "musicxml": "010.musicxml"
+   }
+  },
+  {
+   "no": 11,
+   "title": "조바꿈의 파도",
+   "level": "고급",
+   "bars": 48,
+   "meters": [
+    "5/8",
+    "7/8",
+    "6/8"
+   ],
+   "keys": [
+    "Db",
+    "Ab"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 84,
+    "max_pitch": "C6"
+   },
+   "lines": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "check_line_plan_original_warnings": [],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 2,
+    "trill_after": 1,
+    "trill_measure": 45,
+    "trill_pitch": "G4",
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [
+     18,
+     40
+    ],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 2,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 3,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 10,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 16,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 4
+     },
+     {
+      "measure": 26,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 28,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 30,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 40,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 45,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     },
+     {
+      "measure": 47,
+      "from_idx": 2,
+      "to_idx": 1,
+      "stop_idx": 3
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 5,
+     "expected": 3,
+     "excess": 2
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 272507,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "subito p",
+    "농현",
+    "임시표",
+    "장식음",
+    "트릴"
+   ],
+   "files": {
+    "png": "011.png",
+    "pdf": "011.pdf",
+    "musicxml": "011.musicxml"
+   }
+  },
+  {
+   "no": 12,
+   "title": "종합 챌린지",
+   "level": "고급",
+   "bars": 48,
+   "meters": [
+    "7/8",
+    "5/8",
+    "4/4"
+   ],
+   "keys": [
+    "Gb",
+    "Db"
+   ],
+   "range": {
+    "min_midi": 58,
+    "min_pitch": "B♭3",
+    "max_midi": 84,
+    "max_pitch": "C6"
+   },
+   "lines": [
+    7,
+    7,
+    8,
+    8,
+    6,
+    6,
+    6
+   ],
+   "lines_original": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    6
+   ],
+   "check_line_plan_original_warnings": [
+    "5번째 줄 4/4 7마디",
+    "6번째 줄 4/4 7마디"
+   ],
+   "check_line_plan_final_warnings": [],
+   "systems_in_svg": 7,
+   "system_measure_counts": [
+    7,
+    7,
+    8,
+    8,
+    6,
+    6,
+    6
+   ],
+   "postprocess": {
+    "trill_before": 1,
+    "trill_after": 1,
+    "trill_measure": 46,
+    "trill_pitch": "A♭4",
+    "trill_mordent_removed": false,
+    "subito_p_removed": [],
+    "subito_p_measures": [
+     14,
+     36
+    ],
+    "c~~~_count": 0,
+    "slur_moved": [
+     {
+      "measure": 2,
+      "from_idx": 1,
+      "to_idx": 0,
+      "stop_idx": 2
+     },
+     {
+      "measure": 24,
+      "from_idx": 2,
+      "to_idx": 0,
+      "stop_idx": 3
+     },
+     {
+      "measure": 30,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 35,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     },
+     {
+      "measure": 37,
+      "from_idx": 3,
+      "to_idx": 2,
+      "stop_idx": 4
+     }
+    ],
+    "slur_removed": []
+   },
+   "validation": {
+    "rule1_beam_mid_slur_start": {
+     "count": 0,
+     "detail": []
+    },
+    "rule2_slur_crossing_rest": {
+     "count": 0,
+     "detail": []
+    },
+    "rule3_ornament_overlap": {
+     "trill_plus_mordent_same_note": {
+      "count": 0,
+      "detail": []
+     },
+     "ornament_on_grace_group": {
+      "count": 0,
+      "detail": []
+     },
+     "note": "MusicXML 검사만 수행. SVG 기하 겹침(기호끼리 화면에서 겹치는지)은 이 검증에서 검사 불가."
+    },
+    "rule4_meterSig": {
+     "svg_count": 4,
+     "expected": 3,
+     "excess": 1
+    },
+    "rule5_box_credit_footer": {
+     "pdf_pages": 1,
+     "png_exists": true,
+     "png_bytes": 280408,
+     "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
+    }
+   },
+   "features": [
+    "subito p",
+    "농현",
+    "임시표",
+    "장식음",
+    "트릴"
+   ],
+   "files": {
+    "png": "012.png",
+    "pdf": "012.pdf",
+    "musicxml": "012.musicxml"
+   }
+  }
+ ]
+}
