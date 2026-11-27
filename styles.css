@@ -13,6 +13,7 @@ html[data-theme="light"]{
   --paper:#f7f1e3;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.55}
 .topbar{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 .brand{display:flex;gap:14px;align-items:center}
