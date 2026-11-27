@@ -1,4 +1,4 @@
-/* 해금 초견 프로 — 기능: 필터, 실전 모드, 메트로놈, 기준음, 모의고사, 진도/메모 */
+/* 해금 초견 프로 — 기능: 필터, 조율 기준음(A4 440~450Hz·기본 442), 메트로놈, 으뜸음, 30초 읽기, 모의고사, 진도/메모 */
 "use strict";
 const FALLBACK = [
   {no:1, title:"첫 호흡, 긴 음", level:"기초", key:"Eb", keyLabel:"E♭", meters:"4/4", measures:42, tempo:60, tonic:311.13, tonicLabel:"E♭4", tags:["4/4","E♭"]},
@@ -22,7 +22,19 @@ const store = {
 let progress = store.get();
 const filters = {level:"all", key:"all", meter:"all"};
 let current = null, mockList = [], mockIdx = -1;
-let audioCtx = null, metroTimer = null, metroBeat = 0, droneNodes = null;
+let audioCtx = null, metroTimer = null, metroBeat = 0, droneNodes = null, readTimer = null;
+
+/* ---- 조율 기준음 A4: 해금 기본 442Hz, 440~450Hz 선택 ---- */
+const A4_MIN = 440, A4_MAX = 450, A4_DEFAULT = 442;
+let a4 = A4_DEFAULT;
+(function loadA4(){
+  const v = parseInt(localStorage.getItem("hspro-a4")||"", 10);
+  if(v >= A4_MIN && v <= A4_MAX) a4 = v;
+})();
+/* 기준음이 440Hz일 때의 악보·으뜸음 주파수를 선택된 조율로 비례 이동 */
+const tuneRatio = () => a4 / 440;
+const tuneHz = base => base * tuneRatio();
+const tuneName = () => "A4=" + a4 + "Hz";
 
 const $ = id => document.getElementById(id);
 function pad(n){ return String(n).padStart(3,"0"); }
@@ -33,6 +45,19 @@ function beep(freq, dur, type, gain){
   g.gain.setValueAtTime(gain||0.25, ctx.currentTime);
   g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
   o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + dur);
+}
+/* 30초 읽기 종료 신호음: 맑은 3음 차임(C6-E6-G6) */
+function chime(){
+  const ctx = ensureAudio(), t0 = ctx.currentTime + 0.02;
+  [[1046.50,0],[1318.51,0.15],[1567.98,0.30]].forEach(function(pair){
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "sine"; o.frequency.value = pair[0];
+    const at = t0 + pair[1];
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(0.22, at + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + 1.2);
+    o.connect(g); g.connect(ctx.destination); o.start(at); o.stop(at + 1.3);
+  });
 }
 function stopMetro(){ if(metroTimer){ clearInterval(metroTimer); metroTimer=null; } $("metroBtn").textContent = "메트로놈 OFF"; }
 function toggleMetro(){
@@ -45,7 +70,7 @@ function toggleMetro(){
   $("metroBtn").textContent = "메트로놈 ON · ♩=" + bpm;
   metroTimer = setInterval(()=>{ beep(metroBeat===0?1200:800, 0.08, "square", metroBeat===0?0.22:0.12); metroBeat = (metroBeat+1)%4; }, interval);
 }
-function stopDrone(){ if(droneNodes){ try{ droneNodes.g.gain.setValueAtTime(0, audioCtx.currentTime); droneNodes.o.stop(); }catch(e){} droneNodes=null; } $("droneBtn").textContent="기준음 A4=440"; $("tonicBtn").textContent="으뜸음"; }
+function stopDrone(){ if(droneNodes){ try{ droneNodes.g.gain.setValueAtTime(0, audioCtx.currentTime); droneNodes.o.stop(); }catch(e){} droneNodes=null; } $("droneBtn").textContent = "기준음 재생"; refreshTonicLabel(); }
 function playDrone(freq, label, btn){
   ensureAudio(); stopDrone();
   const ctx = audioCtx, o = ctx.createOscillator(), g = ctx.createGain();
@@ -53,6 +78,16 @@ function playDrone(freq, label, btn){
   o.connect(g); g.connect(ctx.destination); o.start();
   droneNodes={o,g}; btn.textContent = label + " 재생 중 (다시 누르면 정지)";
   setTimeout(()=>{ if(droneNodes && droneNodes.o===o){ stopDrone(); } }, 10000);
+}
+function refreshTonicLabel(){
+  if(!current){ $("tonicBtn").textContent = "으뜸음"; return; }
+  const lbl = current.tonicLabel || current.keyLabel || "";
+  const hz = tuneHz(current.tonic || 440);
+  $("tonicBtn").textContent = "으뜸음 " + lbl + " · " + hz.toFixed(1) + "Hz";
+}
+function refreshDroneLabel(){
+  if(!droneNodes) $("droneBtn").textContent = "기준음 " + a4 + "Hz 재생";
+  $("tuneHint").textContent = "기준음 " + tuneName() + " · 으뜸음과 가이드 재생이 이 조율을 따릅니다.";
 }
 function renderList(){
   const grid = $("songGrid"); grid.innerHTML = "";
@@ -66,11 +101,19 @@ function renderList(){
     const b = document.createElement("button");
     b.className = "song-card" + (pr.done?" done":"");
     b.type = "button";
-    b.innerHTML = "<span class='song-no'>"+p.no+"번 · "+p.level+"</span><h3>"+p.title+"</h3>" +
-      "<p class='song-meta'>"+p.keyLabel+" · "+p.meters+" · "+p.measures+"마디 · ♩="+p.tempo+"</p>" +
-      "<div class='song-tags'>"+(p.tags||[]).map(t=>"<span class='tag'>"+t+"</span>").join("") +
-      (pr.done?"<span class='tag done-tag'>✓ 완료</span>":"") +
-      (pr.count?("<span class='tag'>연습 "+pr.count+"회</span>"):"") + "</div>";
+    b.innerHTML =
+      "<span class='song-thumb-wrap'>" +
+        "<img class='song-thumb' src='scores/"+pad(p.no)+".png' alt='' loading='lazy' decoding='async'>" +
+        "<span class='song-thumb-fade'></span>" +
+      "</span>" +
+      "<span class='song-body'>" +
+        "<span class='song-no'>"+p.no+"번 · "+p.level+"</span>" +
+        "<h3>"+p.title+"</h3>" +
+        "<p class='song-meta'>"+p.keyLabel+" · "+p.meters+" · "+p.measures+"마디 · ♩="+p.tempo+"</p>" +
+        "<span class='song-tags'>"+(p.tags||[]).map(t=>"<span class='tag'>"+t+"</span>").join("") +
+        (pr.done?"<span class='tag done-tag'>✓ 완료</span>":"") +
+        (pr.count?("<span class='tag'>연습 "+pr.count+"회</span>"):"") + "</span>" +
+      "</span>";
     b.onclick = ()=>openSong(p.no, false);
     grid.appendChild(b);
   });
@@ -79,10 +122,7 @@ function renderList(){
 }
 function openSong(no, fromMock){
   const p = PIECES.find(x=>x.no===no); if(!p) return;
-  current = p; stopMetro(); stopDrone(); stopPlayer();
-  $("scoreWrap").classList.remove("blind");
-  $("blindCover").hidden = true;
-  $("answerBtn").hidden = true;
+  current = p; stopMetro(); stopDrone(); stopPlayer(); stopReadTimer();
   $("loopA").value = 1; $("loopB").value = p.measures||""; $("loopChk").checked = false;
   loadTimeline(p.no).then(tl=>{
     $("countInLabel").textContent = "예비박: "+tl.count_in.beats+"박 (첫 마디 박자)";
@@ -93,20 +133,54 @@ function openSong(no, fromMock){
   $("scoreImg").alt = p.no+"번 "+p.title+" 악보";
   $("pdfLink").href = "scores/"+pad(p.no)+".pdf";
   $("xmlLink").href = "scores/"+pad(p.no)+".musicxml";
-  $("tonicBtn").textContent = "으뜸음 "+(p.tonicLabel||p.keyLabel);
   const pr = progress[p.no]||{};
   $("doneCheck").checked = !!pr.done;
   $("countLabel").textContent = "연습 횟수: "+(pr.count||0)+"회";
   $("memoInput").value = pr.memo||"";
   $("mockNav").hidden = !fromMock;
   if(fromMock){ $("mockLabel").textContent = "모의고사 "+(mockIdx+1)+" / "+mockList.length; }
-  $("viewer").scrollIntoView({behavior:"smooth"});
+  refreshTonicLabel(); refreshDroneLabel();
   renderList();
+  // 곡을 열면 악보 첫 단이 sticky 상단바에 가리지 않도록 뷰어 위쪽을 기준으로 맞춤
+  requestAnimationFrame(()=>{ alignViewerToTop(); });
 }
+/* sticky 상단바 높이(모바일에서 2줄이 됨)에 맞춰 스크롤 여백을 매번 다시 계산 */
+function alignViewerToTop(){
+  const tb = document.querySelector(".topbar");
+  const h = tb ? tb.getBoundingClientRect().height : 80;
+  $("viewer").style.scrollMarginTop = Math.round(h + 14) + "px";
+  $("viewer").scrollIntoView({block:"start"});
+}
+window.addEventListener("resize", ()=>{
+  const tb = document.querySelector(".topbar");
+  if(tb) $("viewer").style.scrollMarginTop = Math.round(tb.getBoundingClientRect().height + 14) + "px";
+});
 function saveProgress(){ store.set(progress); renderList(); }
+/* ---- 30초 읽기 → 시작하세요! (집중 뷰 안에서 카운트다운) ---- */
+function stopReadTimer(){ if(readTimer){ clearInterval(readTimer); readTimer=null; } }
+function hideReadTimer(){ stopReadTimer(); const el=$("readTimer"); el.hidden=true; el.classList.remove("done"); }
+function startReadTimer(sec){
+  if(!current) return;
+  stopReadTimer();
+  const el = $("readTimer"), lbl = $("readTimerLabel"), cnt = $("readTimerCount");
+  el.hidden = false; el.classList.remove("done");
+  let t = sec||30;
+  lbl.textContent = "악보를 눈으로만 읽으세요 — " + t + "초";
+  cnt.textContent = t;
+  readTimer = setInterval(()=>{
+    t--;
+    if(t>0){ cnt.textContent = t; return; }
+    clearInterval(readTimer); readTimer = null;
+    lbl.textContent = "시작하세요!";
+    cnt.textContent = "▶";
+    el.classList.add("done");
+    chime();
+    setTimeout(()=>{ if(el.classList.contains("done")) hideReadTimer(); }, 4500);
+  }, 1000);
+}
 /* ---- 오디오 플레이어: 타임라인 기반 피아노 가이드 + 메트로놈 + 예비박 ---- */
 const timelines = {};
-let player = {playing:false, nodes:[], timers:[], poll:null, pieceStart:0, countInSec:0, segStart:0, segEnd:0, speed:1, mode:"piano+metro", loop:false, blind:false, tl:null, fromM:1, toM:0};
+let player = {playing:false, nodes:[], timers:[], poll:null, pieceStart:0, countInSec:0, segStart:0, segEnd:0, speed:1, mode:"piano+metro", loop:false, tl:null, fromM:1, toM:0};
 async function loadTimeline(no){
   if(timelines[no]) return timelines[no];
   const r = await fetch("scores/"+pad(no)+".timeline.json");
@@ -185,13 +259,14 @@ async function playSegment(opts){
   $("playBtn").textContent = "■ 재생 중… (정지하려면 아래 ■ 정지)";
   // 예비박 클릭 (강-약-약...)
   for(let i=0;i<ci.beats;i++) player.nodes.push(clickAt(t0 + i*ci.clickSec/speed, i===0));
-  // 본곡: 음표 + 메트로놈 클릭
+  // 본곡: 음표 + 메트로놈 클릭 (음높이는 선택된 조율 A4 기준으로 비례 이동)
+  const ratio = tuneRatio();
   const playNotes = mode!=="metro", playClicks = mode!=="piano";
   if(playNotes){
     tl.notes.forEach(n=>{
       if(n.start < segStart || n.start >= segEnd) return;
       const when = pieceStart + (n.start-segStart)/speed;
-      player.nodes.push(pianoNoteAt(n.freq, when, n.dur/speed));
+      player.nodes.push(pianoNoteAt(n.freq*ratio, when, n.dur/speed));
     });
   }
   if(playClicks){
@@ -208,64 +283,27 @@ async function playSegment(opts){
     const t = segStart + el;
     let cur = ms[0].m;
     for(const m of ms){ if(m.start <= t+0.001) cur = m.m; }
-    $("nowPlaying").textContent = "지금 "+cur+"마디 / 전체 "+tl.measures+"마디 · "+mode+" · "+speed+"x";
+    $("nowPlaying").textContent = "지금 "+cur+"마디 / 전체 "+tl.measures+"마디 · "+mode+" · "+speed+"x · "+tuneName();
   }, 150);
-  // 종료 처리 (루프면 반복, 블라인드면 정답 버튼 표시)
+  // 종료 처리 (루프면 반복)
   const totalMs = (countInSec + (segEnd-segStart)/speed)*1000 + 300;
   player.timers.push(setTimeout(()=>{
     if(!player.playing) return;
     if(player.loop){ playSegment({mode, fromM, toM, loop:true}); return; }
-    const wasBlind = player.blind;
     stopPlayer();
-    if(wasBlind){
-      player.blind = false;
-      $("answerBtn").hidden = false;
-      $("nowPlaying").textContent = "블라인드 연주 종료 — 정답 피아노로 확인하세요.";
-    }
   }, totalMs));
-}
-function startBlind(){
-  if(!current) return;
-  stopPlayer();
-  $("answerBtn").hidden = true;
-  $("scoreWrap").classList.add("blind");
-  $("blindCover").hidden = false;
-  const banner = $("examBanner"); banner.hidden = false;
-  let t = 30;
-  $("examText").textContent = "초견 읽기 — 악보를 보지 말고 눈으로만 30초!";
-  $("examCount").textContent = t;
-  const iv = setInterval(()=>{
-    t--;
-    if(t<=0){
-      clearInterval(iv);
-      banner.hidden = true;
-      player.blind = true;
-      playSegment({mode:"metro", fromM:1, loop:false});
-    } else { $("examCount").textContent = t; }
-  }, 1000);
-}
-function startExam(){
-  if(!current) return;
-  const banner = $("examBanner"); banner.hidden = false;
-  let t = 30;
-  $("examText").textContent = "초견 읽기 — 악보를 읽으세요. 소리 내지 말고 눈으로만!";
-  $("examCount").textContent = t;
-  const iv = setInterval(()=>{
-    t--;
-    if(t<=0){
-      clearInterval(iv);
-      $("examText").textContent = "연습 시작! 메트로놈을 켜고 연주하세요.";
-      $("examCount").textContent = "▶";
-      beep(880,0.5,"sine",0.3); setTimeout(()=>beep(880,0.5,"sine",0.3),600);
-      setTimeout(()=>{ banner.hidden = true; }, 4000);
-    } else { $("examCount").textContent = t; }
-  }, 1000);
 }
 function startMock(){
   const pick = lvl => { const c = PIECES.filter(p=>p.level===lvl); return c[Math.floor(Math.random()*c.length)]; };
   mockList = [pick("기초"), pick("중급"), pick("고급")].filter(Boolean).map(p=>p.no);
   mockIdx = 0;
   openSong(mockList[0], true);
+}
+function setFocus(on){
+  document.body.classList.toggle("focus", on);
+  if(!on) document.body.classList.remove("show-audio");
+  $("focusBtn").textContent = on ? "집중 뷰 나가기" : "집중 연습 뷰";
+  $("audioToggle").textContent = document.body.classList.contains("show-audio") ? "오디오 설정 닫기" : "오디오 설정";
 }
 document.querySelectorAll(".chip").forEach(ch=>{
   ch.addEventListener("click", ()=>{
@@ -284,7 +322,7 @@ $("themeBtn").onclick = ()=>{
   $("themeBtn").textContent = next==="dark" ? "☀️ 라이트" : "🌙 다크";
 };
 $("mockBtn").onclick = startMock;
-$("closeViewer").onclick = ()=>{ stopMetro(); stopDrone(); stopPlayer(); $("viewer").hidden = true; document.body.classList.remove("focus"); };
+$("closeViewer").onclick = ()=>{ stopMetro(); stopDrone(); stopPlayer(); hideReadTimer(); setFocus(false); $("viewer").hidden = true; };
 $("playBtn").onclick = async ()=>{
   if(player.playing){ stopPlayer(); return; }
   const a = parseInt($("loopA").value)||1, b = parseInt($("loopB").value)||0;
@@ -299,26 +337,47 @@ $("firstNoteBtn").onclick = async ()=>{
   if(!current) return;
   const tl = await loadTimeline(current.no);
   const n = tl.notes[0];
-  if(n){ const ctx = ensureAudio(); pianoNoteAt(n.freq, ctx.currentTime+0.05, 1.2); $("nowPlaying").textContent = "첫 음: "+n.m+"마디 (MIDI "+n.midi+") 미리 듣는 중"; }
+  if(n){ const ctx = ensureAudio(); pianoNoteAt(n.freq*tuneRatio(), ctx.currentTime+0.05, 1.2); $("nowPlaying").textContent = "첫 음: "+n.m+"마디 (MIDI "+n.midi+") 미리 듣는 중 · "+tuneName(); }
 };
-$("blindBtn").onclick = startBlind;
-$("answerBtn").onclick = ()=>{
-  $("scoreWrap").classList.remove("blind");
-  $("blindCover").hidden = true;
-  $("answerBtn").hidden = true;
-  playSegment({mode:"piano+metro", fromM:1, loop:false});
+$("readBtn").onclick = ()=>startReadTimer(30);
+$("readSkip").onclick = hideReadTimer;
+$("a4Sel").onchange = e=>{
+  const v = parseInt(e.target.value,10);
+  if(!(v>=A4_MIN && v<=A4_MAX)) return;
+  a4 = v; localStorage.setItem("hspro-a4", String(a4));
+  stopDrone();
+  refreshDroneLabel(); refreshTonicLabel();
 };
-$("examBtn").onclick = startExam;
 $("metroBtn").onclick = toggleMetro;
-$("droneBtn").onclick = e=>{ if(droneNodes){ stopDrone(); } else { playDrone(440, "기준음 A4=440", e.currentTarget); } };
-$("tonicBtn").onclick = e=>{ if(!current) return; if(droneNodes){ stopDrone(); } else { playDrone(current.tonic, "으뜸음 "+(current.tonicLabel||""), e.currentTarget); } };
-$("focusBtn").onclick = ()=>{ document.body.classList.toggle("focus"); $("focusBtn").textContent = document.body.classList.contains("focus") ? "집중 뷰 나가기" : "집중 연습 뷰"; };
+$("droneBtn").onclick = e=>{ if(droneNodes){ stopDrone(); } else { playDrone(a4, "기준음 A4="+a4+"Hz", e.currentTarget); } };
+$("tonicBtn").onclick = e=>{ if(!current) return; if(droneNodes){ stopDrone(); } else { const hz = tuneHz(current.tonic||440); playDrone(hz, "으뜸음 "+(current.tonicLabel||"")+" "+hz.toFixed(1)+"Hz", e.currentTarget); } };
+$("focusBtn").onclick = ()=>{
+  const on = !document.body.classList.contains("focus");
+  setFocus(on);
+  if(on){ startReadTimer(30); }
+  else { hideReadTimer(); }
+};
+$("audioToggle").onclick = ()=>{
+  const b = document.body;
+  b.classList.toggle("show-audio");
+  $("audioToggle").textContent = b.classList.contains("show-audio") ? "오디오 설정 닫기" : "오디오 설정";
+};
 $("doneCheck").onchange = e=>{ if(!current) return; progress[current.no] = Object.assign({}, progress[current.no], {done:e.target.checked}); saveProgress(); };
 $("countBtn").onclick = ()=>{ if(!current) return; const pr = progress[current.no]||{}; pr.count=(pr.count||0)+1; progress[current.no]=pr; saveProgress(); $("countLabel").textContent="연습 횟수: "+pr.count+"회"; };
 $("memoInput").addEventListener("input", e=>{ if(!current) return; progress[current.no]=Object.assign({}, progress[current.no], {memo:e.target.value}); store.set(progress); });
 $("mockPrev").onclick = ()=>{ if(mockIdx>0){ mockIdx--; openSong(mockList[mockIdx], true); } };
 $("mockNext").onclick = ()=>{ if(mockIdx<mockList.length-1){ mockIdx++; openSong(mockList[mockIdx], true); } };
 (function init(){
+  // 조율 기준음 셀렉트 (440~450Hz, 1Hz 단위 · 기본 442Hz)
+  const sel = $("a4Sel");
+  sel.innerHTML = "";
+  for(let v=A4_MIN; v<=A4_MAX; v++){
+    const o = document.createElement("option");
+    o.value = String(v); o.textContent = String(v);
+    if(v === a4) o.selected = true;
+    sel.appendChild(o);
+  }
+  refreshDroneLabel();
   const savedTheme = localStorage.getItem("hspro-theme");
   if(savedTheme){ document.documentElement.dataset.theme = savedTheme; $("themeBtn").textContent = savedTheme==="dark" ? "☀️ 라이트" : "🌙 다크"; }
   fetch("scores/pieces.json").then(r=>{ if(!r.ok) throw new Error("no json"); return r.json(); })

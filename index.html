@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>해금 초견 프로 — 현대 창작국악 · 고난도 초견 챌린지</title>
-<meta name="description" content="Verovio + Leland로 조판한 해금 초견 챌린지. 입시 실전 모드, 메트로놈, 기준음, 오늘의 모의고사, 진도 체크.">
-<link rel="stylesheet" href="styles.css">
+<meta name="description" content="Verovio + Leland로 조판한 해금 초견 챌린지. 기준음 A4=442Hz(440~450Hz 선택), 메트로놈, 으뜸음, 30초 읽기, 오늘의 모의고사, 진도 체크.">
+<link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
 <header class="topbar">
@@ -64,17 +64,23 @@
       <button id="closeViewer" class="btn ghost" type="button">← 목록으로</button>
       <div class="viewer-title" id="viewerTitle">—</div>
       <div class="viewer-tools">
-        <button id="examBtn" class="btn gold" type="button">입시 실전 모드 (30초 미리보기)</button>
+        <button id="readBtn" class="btn gold" type="button" title="30초 동안 악보를 읽고, 끝나면 신호음과 함께 시작하세요">30초 읽기</button>
         <button id="metroBtn" class="btn" type="button">메트로놈 OFF</button>
-        <button id="droneBtn" class="btn" type="button">기준음 A4=440</button>
-        <button id="tonicBtn" class="btn" type="button">으뜸음</button>
+        <label class="tune-select">기준음 A4
+          <select id="a4Sel" aria-label="조율 기준음 A4 주파수"></select>
+          <span>Hz</span>
+        </label>
         <button id="focusBtn" class="btn" type="button">집중 연습 뷰</button>
+        <button id="audioToggle" class="btn ghost" type="button">오디오 설정</button>
       </div>
     </div>
-    <div class="exam-banner" id="examBanner" hidden>
-      <span id="examText">초견 읽기 — 30초</span>
-      <span class="exam-count" id="examCount">30</span>
+
+    <div class="read-timer" id="readTimer" hidden>
+      <span class="rt-label" id="readTimerLabel">악보를 눈으로만 읽으세요 — 30초</span>
+      <span class="rt-count" id="readTimerCount">30</span>
+      <button class="rt-skip" id="readSkip" type="button" aria-label="30초 읽기 건너뛰기">✕</button>
     </div>
+
     <div class="audio-panel" id="audioPanel">
       <div class="audio-row">
         <strong>▶ 가이드 재생</strong>
@@ -97,6 +103,12 @@
         <span id="countInLabel" class="audio-hint">예비박: —</span>
       </div>
       <div class="audio-row">
+        <strong>기준음 · 으뜸음</strong>
+        <button id="droneBtn" class="btn" type="button">기준음 재생</button>
+        <button id="tonicBtn" class="btn" type="button">으뜸음</button>
+        <span class="audio-hint" id="tuneHint">기준음 A4=442Hz · 으뜸음과 가이드 재생이 이 조율을 따릅니다.</span>
+      </div>
+      <div class="audio-row">
         <span id="nowPlaying" class="now-playing">재생 중이 아닙니다.</span>
         <button id="firstNoteBtn" class="btn ghost" type="button">첫 음 미리 듣기</button>
       </div>
@@ -107,18 +119,13 @@
         <label><input id="loopChk" type="checkbox"> 구간 무한 반복</label>
         <span class="audio-hint">느린 속도(0.75x)와 함께 쓰면 어려운 마디 연습에 좋습니다.</span>
       </div>
-      <div class="audio-row">
-        <strong>블라인드 실전</strong>
-        <button id="blindBtn" class="btn" type="button">블라인드 실전 모드 (30초 읽기 → 메트로놈만)</button>
-        <button id="answerBtn" class="btn gold" type="button" hidden>정답 피아노로 듣기</button>
-        <span class="audio-hint">블라인드: 악보를 가리고 30초 읽은 뒤, 피아노 없이 메트로놈만으로 연주합니다. 끝나면 정답을 피아노로 확인하세요.</span>
-      </div>
     </div>
+
     <div class="score-wrap" id="scoreWrap">
-      <div id="blindCover" class="blind-cover" hidden>초견 중 — 악보를 보지 말고 귀로 들으세요</div>
       <img id="scoreImg" alt="악보" src="">
       <p class="score-note">악보는 A4 세로 1페이지, Verovio + Leland 조판입니다. 아래에서 PDF / MusicXML을 받을 수 있습니다.</p>
     </div>
+
     <div class="viewer-foot">
       <a id="pdfLink" class="btn" href="#" download>PDF 받기</a>
       <a id="xmlLink" class="btn ghost" href="#" download>MusicXML 받기</a>
@@ -129,6 +136,7 @@
         <textarea id="memoInput" rows="2" placeholder="예: 29마디 조바꿈, 46마디 트릴"></textarea>
       </label>
     </div>
+
     <div class="mock-nav" id="mockNav" hidden>
       <button id="mockPrev" class="btn" type="button">← 이전 곡</button>
       <span id="mockLabel">모의고사 1 / 3</span>
@@ -142,6 +150,6 @@
   <p>무단 복제 및 배포를 절대 금합니다.</p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>

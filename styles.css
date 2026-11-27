@@ -17,7 +17,7 @@ html[data-theme="light"]{
 body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.55}
 .topbar{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 .brand{display:flex;gap:14px;align-items:center}
-.brand-mark{background:var(--gold);color:#171512;font-weight:900;font-size:22px;padding:10px 12px;border-radius:10px}
+.brand-mark{background:var(--gold);color:#171512;font-weight:900;font-size:22px;padding:10px 12px;border-radius:10px;white-space:nowrap;flex:0 0 auto}
 .brand h1{margin:0;font-size:22px}
 .brand-sub{font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:400}
 .brand-tag{margin:2px 0 0;font-size:13px;color:var(--muted)}
@@ -36,22 +36,37 @@ main{max-width:1180px;margin:0 auto;padding:20px 18px 40px}
 .chip.active{background:var(--teal);border-color:var(--teal);color:#0f1f1b;font-weight:700}
 .progress-summary{margin-left:auto;font-weight:700;color:var(--gold2)}
 .song-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.song-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;text-align:left;color:var(--text)}
+/* 곡 카드: 악보 상단을 은은한 미니 썸네일로 */
+.song-card{display:block;padding:0;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;text-align:left;color:var(--text);font-family:inherit}
 .song-card:hover{border-color:var(--gold)}
 .song-card.done{border-color:var(--teal)}
+.song-thumb-wrap{display:block;position:relative;height:96px;overflow:hidden;background:#fff;border-bottom:1px solid var(--line)}
+.song-thumb{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.72;filter:saturate(.85)}
+.song-card:hover .song-thumb{opacity:.95}
+.song-thumb-fade{position:absolute;inset:auto 0 0 0;height:52%;background:linear-gradient(to bottom,rgba(38,34,32,0) 0%,var(--surface) 96%)}
+html[data-theme="light"] .song-thumb-fade{background:linear-gradient(to bottom,rgba(255,253,246,0) 0%,var(--surface) 96%)}
+.song-body{display:block;padding:12px 16px 16px}
 .song-no{font-size:12px;color:var(--gold2);font-weight:800;letter-spacing:.08em}
 .song-card h3{margin:6px 0;font-size:18px}
 .song-meta{color:var(--muted);font-size:13px;margin:4px 0}
 .song-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .tag{background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px 9px;font-size:12px}
 .tag.done-tag{background:var(--teal-dim);color:#eafff8;border-color:var(--teal)}
-.viewer{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:8px}
+.viewer{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:8px;scroll-margin-top:96px}
 .viewer-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 .viewer-title{font-weight:800;font-size:17px}
-.viewer-tools{display:flex;gap:8px;flex-wrap:wrap}
-.exam-banner{display:flex;gap:16px;align-items:center;justify-content:center;background:#3a2c10;color:#ffe9b0;border:1px solid var(--gold);border-radius:10px;padding:12px;margin:12px 0;font-weight:800}
-.exam-count{font-size:28px;color:var(--gold2)}
-.score-wrap{background:var(--paper);border-radius:10px;padding:10px;margin:12px 0;text-align:center}
+.viewer-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tune-select{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);font-weight:700}
+.tune-select select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 8px;font-size:14px;font-weight:700}
+/* 30초 읽기 → 시작하세요! (뷰 안 카운트다운) */
+.read-timer{display:flex;align-items:center;justify-content:center;gap:16px;background:#3a2c10;color:#ffe9b0;border:1px solid var(--gold);border-radius:10px;padding:10px 16px;margin:12px 0;font-weight:800}
+.read-timer .rt-label{font-size:16px}
+.read-timer .rt-count{font-size:28px;color:var(--gold2);font-variant-numeric:tabular-nums;line-height:1}
+.read-timer .rt-skip{border:1px solid #6b5527;background:transparent;color:#ffe9b0;border-radius:8px;padding:2px 9px;cursor:pointer;font-size:13px;margin-left:6px}
+.read-timer.done{background:#12352a;border-color:var(--teal);color:#dcfff4}
+.read-timer.done .rt-label{font-size:24px;letter-spacing:.04em}
+.read-timer.done .rt-count{font-size:24px;color:var(--teal)}
+.score-wrap{background:#fff;border-radius:10px;padding:10px;margin:12px 0;text-align:center}
 .score-wrap img{max-width:100%;height:auto;display:block;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.35)}
 .score-note{color:#6b6152;font-size:13px}
 .viewer-foot{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
@@ -65,18 +80,33 @@ main{max-width:1180px;margin:0 auto;padding:20px 18px 40px}
 .audio-row input[type="number"]{width:70px}
 .audio-hint{color:var(--muted);font-size:13px}
 .now-playing{font-weight:800;color:var(--gold2)}
-.blind-cover{background:#111;color:#ffe9b0;font-weight:800;font-size:18px;padding:60px 20px;border-radius:10px;margin-bottom:10px}
-.score-wrap.blind img{visibility:hidden;height:0}
-/* 집중 연습 뷰: 툴바 최소화, 악보가 화면을 꽉 채움 */
-body.focus .topbar,body.focus .intro,body.focus .filters,body.focus .song-grid,body.focus .viewer-foot,body.focus .mock-nav,body.focus footer{display:none}
-body.focus main{max-width:none;padding:0}
-body.focus .viewer{border:none;border-radius:0;margin:0;padding:0}
-body.focus .viewer-bar{position:sticky;top:0;background:var(--bg2);padding:8px 12px;z-index:30}
-body.focus .score-wrap{margin:0;border-radius:0;padding:0}
-body.focus .score-wrap img{max-height:calc(100vh - 60px);width:auto;max-width:100%}
+#audioToggle{display:none}
 footer{border-top:1px solid var(--line);padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+/* ---- 집중 연습 뷰: 상단바가 악보를 덮지 않도록 세로 flex로 공간 분리 ---- */
+body.focus{overflow:hidden}
+body.focus .topbar,body.focus .intro,body.focus .filters,body.focus .song-grid,body.focus .viewer-foot,body.focus .mock-nav,body.focus footer{display:none}
+body.focus main{max-width:none;padding:0;margin:0}
+body.focus .viewer{display:flex;flex-direction:column;height:100vh;height:100dvh;margin:0;padding:0;border:none;border-radius:0;background:var(--bg);scroll-margin-top:0}
+body.focus .viewer-bar{order:0;flex:0 0 auto;flex-wrap:wrap;flex-direction:row;position:static;padding:6px 10px;background:var(--bg2);border-bottom:1px solid var(--line);justify-content:flex-start;gap:6px 8px}
+body.focus #closeViewer{flex:0 0 auto;white-space:nowrap;padding:6px 10px;font-size:13px}
+body.focus .viewer-title{flex:1 1 6em;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.focus .viewer-tools{flex:1 1 auto;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+body.focus .viewer-tools .btn,body.focus .viewer-tools .tune-select{padding:7px 10px;font-size:13px;white-space:nowrap}
+body.focus #focusBtn{background:var(--gold);color:#171512;border-color:var(--gold);font-weight:700}
+body.focus #audioToggle{display:inline-block}
+body.focus .audio-panel{order:1;display:none;flex:0 1 auto;max-height:46vh;overflow:auto;margin:0;border-radius:0;border-left:0;border-right:0}
+body.focus.show-audio .audio-panel{display:flex}
+body.focus .score-wrap{order:2;flex:1 1 auto;min-height:0;margin:0;border-radius:0;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff}
+body.focus .score-wrap img{max-height:100%;max-width:100%;width:auto;height:auto;box-shadow:none}
+body.focus .score-note{display:none}
+body.focus .read-timer{order:3;flex:0 0 auto;margin:0;border-radius:0;border-left:0;border-right:0;padding:8px 12px}
+
 @media (max-width:640px){
   .brand h1{font-size:19px}
   .topbar{padding:12px}
   main{padding:14px 10px 30px}
+  .read-timer .rt-label{font-size:14px}
+  .read-timer.done .rt-label{font-size:19px}
+  body.focus .viewer-tools{justify-content:flex-start}
 }
