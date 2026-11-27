@@ -2,7 +2,7 @@
    악보 파일(scores/*)과 앱 껍데기(index/app.js/styles.css)를 캐싱해
    오프라인에서도 연다. 등록에 실패해도 사이트는 정상 동작한다(app.js에서
    register 실패를 무시한다). 캐시 버전은 pieces.json version과 맞춘다. */
-const CACHE_NAME = "hspro-v3";
+const CACHE_NAME = "hspro-v4";
 const CORE = [
   "./",
   "./index.html",

@@ -1594,8 +1594,18 @@ function afterPiecesLoaded(){
   si.addEventListener("contextmenu", function(e){ e.preventDefault(); });
   si.addEventListener("dragstart", function(e){ e.preventDefault(); });
   // 3단계: PWA Service Worker 등록. 실패해도 사이트는 그대로 동작한다.
+  // 이미 SW가 제어하던 브라우저에서 새 버전 SW가 활성화되면(배포 직후) 한 번만
+  // 새로고침해 최신 앱 껍데기를 받게 한다. 처음 방문(제어자 없음)은 새로고침하지 않고,
+  // 연습 재생·메트로놈 중이면 소리를 끊지 않도록 다음 방문으로 미룬다.
   if("serviceWorker" in navigator){
     try{
+      const hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener("controllerchange", function(){
+        if(!hadController || window.__hsproReloaded) return;
+        if(player.playing || metro.timer) return;
+        window.__hsproReloaded = true;
+        location.reload();
+      });
       navigator.serviceWorker.register("sw.js").catch(function(){});
     }catch(e){}
   }
