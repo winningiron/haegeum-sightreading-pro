@@ -16,8 +16,9 @@ venv: ~/workspace/.venv-verovio 로 실행한다.
 출력: ../scores/001.png, 001.pdf, 001.musicxml ... 012.musicxml,
       ../scores/pieces.json, ../scores/validation.json
 """
-import os, sys, json, re
+import os, sys, json, re, io
 import xml.etree.ElementTree as ET
+from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, "/home/hatch/workspace/haegeum-lounge-src/tools")
 import gen_scores
@@ -36,7 +37,103 @@ DOCTYPE = ('<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 '
            'Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">')
 TRILL_MEASURE = 46  # 101번과 같은 기준 위치: 46마디 첫 긴 음 1곳. 없으면 가장 가까운 마디.
 
+# 3단계: 자산 캐시 버스팅 버전. pieces.json의 version 필드와 PNG/PDF/MusicXML
+# URL의 ?v=버전이 이 값을 쓴다. 악보를 다시 만들면 여기서 올린다.
+ASSET_VERSION = 3
+
+WATERMARK_LINES = ["해금 초견 프로 · 개인 연습 전용", "무단 복제 금지"]
+WATERMARK_FONT_SIZE = 66
+WATERMARK_ALPHA = 20  # 0~255. 악보를 가리지 않을 만큼 희미하게.
+
+
+def apply_watermark(canvas):
+    """Verovio 렌더링이 끝난 PNG 캔버스에 PIL 폰트 렌더링으로만 희미한
+    대각선 워터마크를 덧씌운다. 직접 도형 그리기는 쓰지 않는다
+    (텍스트 렌더링만). 악보 위를 가로지르되 alpha가 낮아 음표가 그대로 보인다."""
+    W, H = canvas.size
+    overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    font = ImageFont.truetype(gen_scores.FONT_KR, WATERMARK_FONT_SIZE)
+    for line in WATERMARK_LINES:
+        bb = draw.textbbox((0, 0), line, font=font)
+        tw, th = bb[2] - bb[0], bb[3] - bb[1]
+        # 세 단으로 나눠 대각선 띠가 페이지 전체를 덮게 한다.
+        # 두 줄은 위아래로 겹치지 않게 쌓는다 (줄마다 th+14 간격).
+        li = WATERMARK_LINES.index(line)
+        for k, fy in enumerate((0.28, 0.52, 0.76)):
+            y = int(H * fy) + (k - 1) * (th + 26) - th // 2 + li * (th + 14)
+            draw.text(((W - tw) / 2 - bb[0], y - bb[1]),
+                      line, fill=(40, 40, 40, WATERMARK_ALPHA), font=font)
+    overlay = overlay.rotate(-28, resample=Image.BICUBIC, center=(W / 2, H / 2))
+    return Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB")
+
+# ---------------------------------------------------------------- 1단계 패치
+# (a) 마지막 단 하단 여백: gen_scores.render() 안의 spread_systems()는
+#     bottom=160으로 마지막 오선을 페이지 맨 아래에 두는데, 9번 45마디처럼
+#     마지막 단에 subito p + 크레셴도 헤어핀이 함께 오면 오선 아래 요소가
+#     SVG 페이지 높이를 넘어 반쯤 잘린다. haegeum-lounge-src의
+#     gen_scores.py는 건드리지 않고, 이 스크립트에서만 spread_systems를
+#     bottom=260으로 감싸서 쓴다(마지막 단이 약 100단위 위로 올라가
+#     subito p 전체가 페이지 안에 들어간다. 단 사이 간격은 470->450으로
+#     소폭만 줄고, 1단 위치·A4 1페이지·7단은 그대로다).
+_SPREAD_ORIG = gen_scores.spread_systems
+
+
+def _spread_patched(svg, page_h, top=200, bottom=260):
+    return _SPREAD_ORIG(svg, page_h, top=top, bottom=bottom)
+
+
+gen_scores.spread_systems = _spread_patched
+
+# (b) 악보 상단 헤더: gen_scores.render() 방식(PIL로 캔버스에 직접 글자)을
+#     따라, 렌더된 PNG 위쪽에 제목 줄을 한 줄 덧붙인다.
+#     "9번 · 변박의 불꽃 · ♩=84" — 곡 번호·곡명·초기 템포.
+#     번호 박스·크레딧 줄 아래가 아니라 맨 위에 새 줄을 넣어 1단 템포와
+#     겹치지 않게 한다. PDF는 새 캔버스로 다시 만든다(A4 세로 1페이지 유지).
+HEADER_EXTRA = 88
+HEADER_FONT_SIZE = 40
+
+
+def render_with_header(xml2, no, outdir, cfg, total):
+    png_out, pdf_out, size, svg = gen_scores.render(
+        xml2, no, outdir, filename=f"{no:03d}", total=total, want_svg=True)
+    first_meter = cfg["sections"][0][1]
+    dotted = first_meter in ((6, 8), (9, 8), (12, 8))
+    bpm0 = cfg["tempos"][1]
+    tempo_txt = ("♩." if dotted else "♩") + f"={bpm0}"
+    line = f"{no}번 · {cfg['title']} · {tempo_txt}"
+    img = Image.open(png_out).convert("RGB")
+    canvas = Image.new("RGB", (img.width, img.height + HEADER_EXTRA), "white")
+    canvas.paste(img, (0, HEADER_EXTRA))
+    draw = ImageDraw.Draw(canvas)
+    font = ImageFont.truetype(gen_scores.FONT_KR, HEADER_FONT_SIZE)
+    bb = draw.textbbox((0, 0), line, font=font)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    draw.text(((canvas.width - tw) / 2 - bb[0],
+               (HEADER_EXTRA - th) / 2 - bb[1]),
+              line, fill="#111111", font=font)
+    canvas = apply_watermark(canvas)  # 3단계: PNG·PDF 모두에 희미한 워터마크
+    canvas.save(png_out, optimize=True)
+    doc = fitz.open()
+    page_w, page_h = 595, 842  # A4 세로 (캔버스는 항상 세로형)
+    page = doc.new_page(width=page_w, height=page_h)
+    buf = io.BytesIO()
+    canvas.save(buf, format="JPEG", quality=92, subsampling=0, optimize=True)
+    scale = min((page_w - 24) / canvas.width, (page_h - 24) / canvas.height)
+    w, h = canvas.width * scale, canvas.height * scale
+    page.insert_image(fitz.Rect((page_w - w) / 2, (page_h - h) / 2,
+                                (page_w + w) / 2, (page_h + h) / 2),
+                      stream=buf.getvalue())
+    doc.save(pdf_out, deflate=True, garbage=4, clean=True)
+    doc.close()
+    return png_out, pdf_out, canvas.size, svg
+
+
 # ---------------------------------------------------------------- 12곡 스펙
+# grouping: 5/8·7/8 비대칭 박자의 빔 묶음 실측값(tools/make_timeline.py와
+# 공유). 5/8은 4곡 모두 3+2, 7/8은 4곡 모두 3+2+2가 지배적이다.
+# (과제 지문의 기본값 7/8=2+2+3과 다르다 — 실제 악보 빔이 3+2+2이므로
+# 곡별 실측값을 쓴다. 기본값은 make_timeline.py의 GROUPING_DEFAULT 참조.)
 # lines_adj: 10·12번은 원래 lines가 check_line_plan 경고를 냈다
 # (4/4 한 줄 7마디). 규칙을 지키도록 줄 나눔만 조정했고, 그 외 스펙은 그대로다.
 #   10번 원래 [7,7,7,7,7,7,6] -> [8,8,6,6,8,6,6] (박자 바뀜 15마디만 줄 중간)
@@ -63,12 +160,12 @@ PIECES = [
     dict(no=5, bowing=True, level="중급", key="Eb", seed=405,
          sections=[(21, (5, 8)), (28, (3, 4))], lines=[7, 7, 7, 7, 7, 7, 7],
          tempos={1: 84, 22: 92}, dynamics={1: "mf"}, key_changes={22: "Ab"},
-         subito=[15, 45],
+         subito=[15, 45], grouping={"5/8": [3, 2]},
          title="다섯 박의 파도", tags=["5/8", "3/4", "E♭", "A♭", "변박", "조바꿈"]),
     dict(no=6, bowing=True, level="중급", key="Ab", seed=406,
          sections=[(21, (7, 8)), (28, (6, 8))], lines=[7, 7, 7, 7, 7, 7, 7],
          tempos={1: 88, 22: 69}, dynamics={1: "mp"},
-         subito=[15, 40],
+         subito=[15, 40], grouping={"7/8": [3, 2, 2]},
          title="일곱 박의 미로", tags=["7/8", "6/8", "A♭", "변박"]),
     dict(no=7, bowing=True, level="중급", key="Db", seed=407,
          sections=[(24, (9, 8)), (24, (4, 4))], lines=[8, 8, 8, 6, 6, 6, 6],
@@ -84,25 +181,27 @@ PIECES = [
          sections=[(14, (5, 8)), (14, (3, 4)), (14, (5, 8)), (6, (4, 4))],
          lines=[7, 7, 7, 7, 7, 7, 6],
          tempos={1: 84, 15: 96, 29: 84, 43: 100}, dynamics={1: "mf"},
-         key_changes={29: "Ab"}, subito=[15, 45],
+         key_changes={29: "Ab"}, subito=[15, 45], grouping={"5/8": [3, 2]},
          title="변박의 불꽃", tags=["5/8", "3/4", "4/4", "E♭", "A♭", "변박", "조바꿈"]),
     dict(no=10, bowing=True, level="고급", key="Ab", seed=410,
          sections=[(14, (7, 8)), (14, (4, 4)), (14, (7, 8)), (6, (4, 4))],
          lines=[8, 8, 6, 6, 8, 6, 6], lines_original=[7, 7, 7, 7, 7, 7, 6],
          tempos={1: 88, 15: 92, 29: 88, 43: 100}, dynamics={1: "f"},
-         key_changes={29: "Db"}, subito=[12, 38],
+         key_changes={29: "Db"}, subito=[12, 38], grouping={"7/8": [3, 2, 2]},
          title="엇박의 도전", tags=["7/8", "4/4", "A♭", "D♭", "변박", "조바꿈"]),
     dict(no=11, bowing=True, level="고급", key="Db", seed=411,
          sections=[(14, (5, 8)), (14, (7, 8)), (20, (6, 8))],
          lines=[7, 7, 7, 7, 7, 7, 6],
          tempos={1: 92, 15: 88, 29: 72}, dynamics={1: "mf"},
          key_changes={29: "Ab"}, subito=[18, 40],
+         grouping={"5/8": [3, 2], "7/8": [3, 2, 2]},
          title="조바꿈의 파도", tags=["5/8", "7/8", "6/8", "D♭", "A♭", "변박", "조바꿈"]),
     dict(no=12, bowing=True, level="고급", key="Gb", seed=412,
          sections=[(14, (7, 8)), (14, (5, 8)), (20, (4, 4))],
          lines=[7, 7, 8, 8, 6, 6, 6], lines_original=[7, 7, 7, 7, 7, 7, 6],
          tempos={1: 80, 15: 84, 29: 92}, dynamics={1: "f"},
          key_changes={29: "Db"}, subito=[14, 36],
+         grouping={"7/8": [3, 2, 2], "5/8": [3, 2]},
          title="종합 챌린지", tags=["7/8", "5/8", "4/4", "G♭", "D♭", "변박", "조바꿈"]),
 ]
 
@@ -512,8 +611,8 @@ def main():
         with open(mx_path, "w", encoding="utf-8") as f:
             f.write(xml2)
 
-        png_out, pdf_out, size, svg = gen_scores.render(
-            xml2, no, OUTDIR, filename=f"{no:03d}", total=total, want_svg=True)
+        png_out, pdf_out, size, svg = render_with_header(
+            xml2, no, OUTDIR, cfg, total)
         with open(os.path.join(SVGDIR, f"{no:03d}.svg"), "w", encoding="utf-8") as f:
             f.write(svg)
         print(f"#{no} render: {png_out} {pdf_out} {size}", flush=True)
@@ -538,6 +637,7 @@ def main():
             "lines_original": lines_orig, "seed": cfg["seed"],
             "sections": [[c, gen_scores.METER_LABEL[mt]] for c, mt in cfg["sections"]],
             "subito": cfg.get("subito", []),
+            "grouping": cfg.get("grouping", {}),
             "files": {"png": f"{no:03d}.png", "pdf": f"{no:03d}.pdf",
                       "musicxml": f"{no:03d}.musicxml"},
         })
@@ -558,7 +658,10 @@ def main():
         })
 
     with open(os.path.join(OUTDIR, "pieces.json"), "w", encoding="utf-8") as f:
-        json.dump(pieces_out, f, ensure_ascii=False, indent=1)
+        # 3단계: version 필드 추가. app.js가 읽어 PNG/PDF/MusicXML/timeline URL에
+        # ?v=버전을 붙인다 (캐시 버스팅). 구버전 app.js도 {pieces} 형태를 읽는다.
+        json.dump({"version": ASSET_VERSION, "pieces": pieces_out},
+                  f, ensure_ascii=False, indent=1)
     with open(os.path.join(OUTDIR, "validation.json"), "w", encoding="utf-8") as f:
         json.dump(validation_out, f, ensure_ascii=False, indent=1)
     print("pieces.json / validation.json 저장 완료")

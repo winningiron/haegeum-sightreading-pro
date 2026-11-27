@@ -10,10 +10,36 @@ import xml.etree.ElementTree as ET
 
 STEP = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
 
+# 1단계: 비대칭 박자(5/8·7/8)의 메트로놈 그룹핑.
+# 기본값(과제 지문): 5/8=3+2, 7/8=2+2+3.
+# 단, 이 12곡의 실제 빔 묶음은 7/8이 3+2+2가 지배적이므로
+# scores/pieces.json의 곡별 grouping이 있으면 그 값을 쓴다
+# (build_scores.py PIECES에서 빔 실측으로 채움). pieces.json이 없으면 기본값.
+GROUPING_DEFAULT = {"5/8": [3, 2], "7/8": [2, 2, 3]}
+
+
+def load_piece_groupings(scores_dir):
+    """pieces.json -> {곡번호: {"5/8": [...], "7/8": [...]}} (없으면 {})."""
+    try:
+        with open(os.path.join(scores_dir, "pieces.json"), encoding="utf-8") as f:
+            data = json.load(f)
+        arr = data if isinstance(data, list) else data.get("pieces", [])
+        out = {}
+        for p in arr:
+            g = p.get("grouping") or {}
+            if g:
+                out[int(p["no"])] = {k: list(v) for k, v in g.items()}
+        return out
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
+
 def freq_of(midi):
     return round(440.0 * (2 ** ((midi - 69) / 12.0)), 2)
 
-def parse_file(path):
+def parse_file(path, piece_grouping=None):
+    grouping = dict(GROUPING_DEFAULT)
+    if piece_grouping:
+        grouping.update(piece_grouping)
     tree = ET.parse(path)
     root = tree.getroot()
     part = root.find('part')
@@ -165,6 +191,8 @@ def parse_file(path):
         out_notes[i]['dur'] = round(max(0.05, e - s), 3)
     total_sec = round(q_to_sec2(total_q), 2)
     # 마디별 시작 시간 (박자·템포는 직전 마디 것을 이어받는다)
+    # 5/8·7/8 마디에는 grouping(8분음표 묶음, 예: [3, 2])도 함께 넣어
+    # 메트로놈이 measure_starts만으로 강세 위치를 계산할 수 있게 한다.
     measure_starts = []
     last_mt = {'beats': 4, 'beat_type': 4}
     last_tp = {'bpm': 80, 'unit': 'quarter'}
@@ -175,19 +203,47 @@ def parse_file(path):
         tp = next((x for x in tempos if x['measure'] == mi), None)
         if tp:
             last_tp = tp
-        measure_starts.append({
+        entry = {
             'm': mi, 'start': round(q_to_sec2(m_start[mi]), 3),
             'beats': last_mt['beats'], 'beat_type': last_mt['beat_type'],
             'bpm': last_tp['bpm'], 'unit': last_tp['unit'],
-        })
-    # 메트로놈 클릭 타임라인 (박 단위): 복합박자는 점4분음표 박, 단순박자는 4분음표 박
+        }
+        meter_label = f"{last_mt['beats']}/{last_mt['beat_type']}"
+        if meter_label in grouping:
+            entry['grouping'] = list(grouping[meter_label])
+        measure_starts.append(entry)
+    # 메트로놈 클릭 타임라인 (박 단위).
+    # level: 2=마디 첫 박(강), 1=그룹 첫 박(중강), 0=그 외(약).
+    # 'accent'는 하위 호환용으로 level==2와 같다.
+    # - 복합박자(6/8·9/8·12/8): 점4분음표 단위 클릭, 그룹 첫 박 중강.
+    # - 단순박자(2/4·3/4·4/4): 4분음표 단위 클릭, 첫 박만 강.
+    # - 비대칭박자(5/8·7/8): grouping 경계에서만 클릭. 기존 로직은
+    #   5/8을 2개 클릭(2+3 위치), 7/8을 4개 클릭(2+2+2+1 위치)으로
+    #   만들었는데, 실제 빔 묶음(5/8=3+2, 7/8=3+2+2)과 달라 고쳤다.
     clicks = []
     for ms in measure_starts:
-        beat_len_q = 1.5 if ms['unit'] == 'dotted-quarter' else 1.0
-        n_clicks = int(round((ms['beats'] * (4.0 / ms['beat_type'])) / beat_len_q))
-        for k in range(n_clicks):
-            t = q_to_sec2(m_start[ms['m']] + k * beat_len_q)
-            clicks.append({'t': round(t, 3), 'm': ms['m'], 'accent': k == 0})
+        meter_label = f"{ms['beats']}/{ms['beat_type']}"
+        if ms['unit'] == 'dotted-quarter':
+            n = int(round((ms['beats'] * (4.0 / ms['beat_type'])) / 1.5))
+            offsets_q = [k * 1.5 for k in range(n)]
+            levels = [2] + [1] * (n - 1)
+        elif meter_label in grouping:
+            groups = grouping[meter_label]
+            offsets_q, levels = [], []
+            pos = 0.0
+            for gi, g in enumerate(groups):
+                offsets_q.append(pos)
+                levels.append(2 if gi == 0 else 1)
+                pos += g * 0.5
+        else:
+            beat_len_q = 4.0 / ms['beat_type']
+            n = ms['beats']
+            offsets_q = [k * beat_len_q for k in range(n)]
+            levels = [2] + [0] * (n - 1)
+        for off_q, level in zip(offsets_q, levels):
+            t = q_to_sec2(m_start[ms['m']] + off_q)
+            clicks.append({'t': round(t, 3), 'm': ms['m'],
+                           'accent': level == 2, 'level': level})
     # 예비박: 첫 마디 박자 수만큼. 단순박자는 분자 개수, 복합박자는 점4분음표 박 개수
     first = measure_starts[0]
     if first['unit'] == 'dotted-quarter':
@@ -202,6 +258,9 @@ def parse_file(path):
         'total_sec': total_sec,
         'tempos': tempos,
         'meters': meters,
+        'groupings': {k: list(v) for k, v in grouping.items()
+                      if any(f"{ms['beats']}/{ms['beat_type']}" == k
+                             for ms in measure_starts)},
         'measure_starts': measure_starts,
         'notes': out_notes,
         'clicks': clicks,
@@ -211,12 +270,14 @@ def parse_file(path):
 
 def main():
     scores_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser('~/workspace/haegeum-sightreading-pro/scores')
+    piece_groupings = load_piece_groupings(scores_dir)
     made = []
     for name in sorted(os.listdir(scores_dir)):
         if not name.endswith('.musicxml'):
             continue
         no = int(name[:3])
-        data = parse_file(os.path.join(scores_dir, name))
+        data = parse_file(os.path.join(scores_dir, name),
+                          piece_grouping=piece_groupings.get(no))
         out = os.path.join(scores_dir, f'{no:03d}.timeline.json')
         with open(out, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=1)

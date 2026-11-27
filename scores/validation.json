@@ -104,7 +104,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 225252,
+     "png_bytes": 341985,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -248,7 +248,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 189035,
+     "png_bytes": 304741,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -380,7 +380,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 215553,
+     "png_bytes": 333115,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -519,7 +519,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 203630,
+     "png_bytes": 318291,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -713,7 +713,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 257912,
+     "png_bytes": 371003,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -913,7 +913,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 274916,
+     "png_bytes": 389666,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1066,7 +1066,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 288576,
+     "png_bytes": 404847,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1212,7 +1212,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 262163,
+     "png_bytes": 377260,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1394,7 +1394,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 277854,
+     "png_bytes": 393291,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1561,7 +1561,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 296673,
+     "png_bytes": 410501,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1732,7 +1732,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 272507,
+     "png_bytes": 386953,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
@@ -1876,7 +1876,7 @@
     "rule5_box_credit_footer": {
      "pdf_pages": 1,
      "png_exists": true,
-     "png_bytes": 280408,
+     "png_bytes": 396739,
      "note": "번호 박스·우상단 크레딧·하단 문구는 gen_scores.render()가 PNG/PDF에 직접 그린다. 이 규칙은 PDF 1페이지와 PNG 존재로 확인한다."
     }
    },
