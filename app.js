@@ -70,7 +70,7 @@ function toggleMetro(){
   $("metroBtn").textContent = "메트로놈 ON · ♩=" + bpm;
   metroTimer = setInterval(()=>{ beep(metroBeat===0?1200:800, 0.08, "square", metroBeat===0?0.22:0.12); metroBeat = (metroBeat+1)%4; }, interval);
 }
-function stopDrone(){ if(droneNodes){ try{ droneNodes.g.gain.setValueAtTime(0, audioCtx.currentTime); droneNodes.o.stop(); }catch(e){} droneNodes=null; } $("droneBtn").textContent = "기준음 재생"; refreshTonicLabel(); }
+function stopDrone(){ if(droneNodes){ try{ droneNodes.g.gain.setValueAtTime(0, audioCtx.currentTime); droneNodes.o.stop(); }catch(e){} droneNodes=null; } refreshDroneLabel(); refreshTonicLabel(); }
 function playDrone(freq, label, btn){
   ensureAudio(); stopDrone();
   const ctx = audioCtx, o = ctx.createOscillator(), g = ctx.createGain();
