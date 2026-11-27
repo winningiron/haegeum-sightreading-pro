@@ -175,7 +175,7 @@ function startReadTimer(sec){
     cnt.textContent = "▶";
     el.classList.add("done");
     chime();
-    setTimeout(()=>{ if(el.classList.contains("done")) hideReadTimer(); }, 4500);
+    setTimeout(()=>{ if(el.classList.contains("done")) hideReadTimer(); }, 8000);
   }, 1000);
 }
 /* ---- 오디오 플레이어: 타임라인 기반 피아노 가이드 + 메트로놈 + 예비박 ---- */
