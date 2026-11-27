@@ -85,7 +85,7 @@ footer{border-top:1px solid var(--line);padding:18px;text-align:center;color:var
 
 /* ---- 집중 연습 뷰: 상단바가 악보를 덮지 않도록 세로 flex로 공간 분리 ---- */
 body.focus{overflow:hidden}
-body.focus .topbar,body.focus .intro,body.focus .filters,body.focus .song-grid,body.focus .viewer-foot,body.focus .mock-nav,body.focus footer{display:none}
+body.focus .topbar,body.focus .intro,body.focus .filters,body.focus .song-grid,body.focus .viewer-foot,body.focus .mock-nav,body.focus footer,body.focus .collapse-btn,body.focus .practice-panel,body.focus .mock-summary{display:none}
 body.focus main{max-width:none;padding:0;margin:0}
 body.focus .viewer{display:flex;flex-direction:column;height:100vh;height:100dvh;margin:0;padding:0;border:none;border-radius:0;background:var(--bg);scroll-margin-top:0}
 body.focus .viewer-bar{order:0;flex:0 0 auto;flex-wrap:wrap;flex-direction:row;position:static;padding:6px 10px;background:var(--bg2);border-bottom:1px solid var(--line);justify-content:flex-start;gap:6px 8px}
